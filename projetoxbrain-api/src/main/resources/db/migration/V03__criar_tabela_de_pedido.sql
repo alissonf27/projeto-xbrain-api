@@ -3,6 +3,6 @@ CREATE TABLE pedido (
 	id_cliente BIGINT(20),
 	produtos VARCHAR(100) NOT NULL,
 	valor_total DECIMAL(10,2) NOT NULL,
-	endereco_entrega VARCHAR(50) NOT NULL,
+	endereco_entrega VARCHAR(100) NOT NULL,
 	FOREIGN KEY (id_cliente) REFERENCES cliente(id)
 );

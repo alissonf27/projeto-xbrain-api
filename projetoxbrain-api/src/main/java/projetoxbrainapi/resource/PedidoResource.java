@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import projetoxbrainapi.event.RecursoCriadoEvent;
 import projetoxbrainapi.model.Pedido;
+import projetoxbrainapi.queue.OrderQueueSender;
 import projetoxbrainapi.repository.PedidoRepository;
 import projetoxbrainapi.service.PedidoService;
 
@@ -38,6 +39,9 @@ public class PedidoResource {
 	@Autowired
 	private PedidoService pedidoService;
 	
+	@Autowired
+	private OrderQueueSender sender;
+	
 	@GetMapping
 	public List<Pedido> listar() {
 		return this.pedidoRepository.findAll();
@@ -52,10 +56,10 @@ public class PedidoResource {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Pedido> novo(@Valid @RequestBody Pedido pedido, HttpServletResponse response) {
-		Pedido pedidoSalvo = this.pedidoRepository.save(pedido);
+		Pedido pedidoSalvo = this.pedidoRepository.save(this.pedidoService.atribuir(pedido));
 		this.publisher.publishEvent(new RecursoCriadoEvent(this, response, pedidoSalvo.getId()));
-		return ResponseEntity.ok(pedidoSalvo);
-		//TODO:implementar o metodo de calculo de total dos produtos e atribuir endereco de entrega do cliente
+		this.sender.send("TESTE");
+		return ResponseEntity.ok(pedidoSalvo);	
 	}
 	
 	@PutMapping("/{id}")
