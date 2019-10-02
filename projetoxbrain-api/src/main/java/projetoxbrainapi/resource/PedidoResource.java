@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import projetoxbrainapi.event.RecursoCriadoEvent;
 import projetoxbrainapi.model.Pedido;
 import projetoxbrainapi.queue.OrderQueueSender;
@@ -55,11 +58,12 @@ public class PedidoResource {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Pedido> novo(@Valid @RequestBody Pedido pedido, HttpServletResponse response) {
+	public ResponseEntity<Pedido> novo(@Valid @RequestBody Pedido pedido, HttpServletResponse response) throws JsonProcessingException {
 		Pedido pedidoSalvo = this.pedidoRepository.save(this.pedidoService.atribuir(pedido));
 		this.publisher.publishEvent(new RecursoCriadoEvent(this, response, pedidoSalvo.getId()));
-		this.sender.send("TESTE");
-		return ResponseEntity.ok(pedidoSalvo);	
+		ObjectMapper objectMapper = new ObjectMapper();
+		this.sender.send(objectMapper.writeValueAsString(pedido));
+		return ResponseEntity.ok(pedidoSalvo);
 	}
 	
 	@PutMapping("/{id}")

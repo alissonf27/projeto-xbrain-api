@@ -17,4 +17,5 @@ public class OrderQueueSender {
     public void send(String order) {
         rabbitTemplate.convertAndSend(this.queue.getName(), order);
     }
+    
 }

@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="pedido")
 public class Pedido {
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -69,6 +69,12 @@ public class Pedido {
 
 	public void setEndereco_entrega(String endereco_entrega) {
 		this.endereco_entrega = endereco_entrega;
+	}
+
+	@Override
+	public String toString() {
+		return "Pedido [id=" + id + ", produtos=" + produtos + ", valor_total=" + valor_total + ", cliente=" + cliente
+				+ ", endereco_entrega=" + endereco_entrega + "]";
 	}
 	
 }

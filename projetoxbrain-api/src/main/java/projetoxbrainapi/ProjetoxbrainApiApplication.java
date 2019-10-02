@@ -6,8 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 
 @SpringBootApplication
+@EnableRabbit
 public class ProjetoxbrainApiApplication {
 
 	@Value("${queue.order.name}")
