@@ -21,9 +21,9 @@ public class Pedido {
 	
 	@NotNull
 	private String produtos;
-	
+
 	private BigDecimal valor_total;
-	
+
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name="id_cliente")
